@@ -2,7 +2,6 @@ package gounzip
 
 import (
 	"archive/zip"
-	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -43,10 +42,10 @@ func Unzip(src string, options ...Option) error {
 
 		// The default output destination will be a folder adjacent to the target file
 		// with the same name as the target, without the file extension.
-		// Eg, a src '~/work/project/file.zip' would have a default destination of '~/work/project/file/' 
-		Destination:     filepath.Join(filepath.Dir(src), strings.TrimSuffix(b, filepath.Ext(b))),
+		// Eg, a src '~/work/project/file.zip' would have a default destination of '~/work/project/file/'
+		Destination: filepath.Join(filepath.Dir(src), strings.TrimSuffix(b, filepath.Ext(b))),
 
-		// 
+		//
 		StripComponents: 1,
 	}
 
@@ -118,5 +117,3 @@ func extractAndWriteFile(f *zip.File, dest string, c uint) error {
 	}
 	return nil
 }
-
-func stripPathComponents

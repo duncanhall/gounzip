@@ -1,0 +1,11 @@
+version: 2
+jobs:
+  build:
+    docker: 
+      - image: circleci/golang:1.10
+
+    working_directory: /go/src/github.com/duncanhall.net/gounzip
+
+    steps:
+      - checkout
+      - run: go test
