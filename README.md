@@ -17,7 +17,7 @@ gounzip.Unzip("/home/project/archive.zip") // Outputs zip contents to "/home/pro
 ```
 If the default destination directory does not exist it will be created.  
 
-To specifiy a destination directory, provide a `gounzip.Destination` setter:`
+To specifiy a destination directory, provide a `gounzip.Destination` setter:
 
 ```go
 gounzip.Unzip("/home/project/archive.zip", gounzip.Destination("/home/output/project"))
@@ -28,3 +28,9 @@ You can skip folder levels (components) from the output by providing a `gounzip.
 gounzip.Unzip("/home/project/archive.zip", gounzip.StripComponents(1))
 ```
 This can be useful when a top-level folder was zipped, rather than just it's content and you don't want the folder to appear in the output.
+
+Options can be combined, in any order:
+
+```go
+gounzip.Unzip("/project/templates.zip", gounzip.StripComponents(1), gounzip.Destination("/project-templates"))
+```
