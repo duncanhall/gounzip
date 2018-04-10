@@ -1,6 +1,6 @@
 # gounzip
 
-An OS agnostic util for unzipping files in Go.
+A cross-platform utility for unzipping files in Go.
 
 ## Install
 
