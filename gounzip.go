@@ -18,6 +18,10 @@ type Options struct {
 	// Number of leading components to strip from file paths (same as tar --strip-components)
 	// Defaults to 0
 	StripComponents uint
+
+	// Whether the original zip should be removed after unzipping
+	// Defaults to false
+	DeleteSource bool
 }
 
 // Option is a setter for assigning values to Options
@@ -37,6 +41,13 @@ func StripComponents(n uint) Option {
 	}
 }
 
+// DeleteSource creates a setter for Options.DeleteSource values
+func DeleteSource(d bool) Option {
+	return func(args *Options) {
+		args.DeleteSource = d
+	}
+}
+
 // Unzip accepts a path to a compressed .zip file and outputs the contents
 // Optional arguments are passed in as Option setters
 func Unzip(src string, options ...Option) error {
@@ -51,6 +62,9 @@ func Unzip(src string, options ...Option) error {
 
 		// The default StripComponent value is left at 0, which will not strip anything
 		StripComponents: 0,
+
+		// Don't delete source files by default
+		DeleteSource: false,
 	}
 
 	// Apply any user set options to override defaults
@@ -75,6 +89,13 @@ func Unzip(src string, options ...Option) error {
 	// fully nested path
 	for _, f := range r.File {
 		err := extractFile(f, args.Destination, args.StripComponents)
+		if err != nil {
+			return err
+		}
+	}
+
+	if args.DeleteSource {
+		err := os.Remove(src)
 		if err != nil {
 			return err
 		}
