@@ -128,12 +128,13 @@ func extractFile(f *zip.File, dest string, c uint) error {
 	// Recreate the file path with stripped components removed
 	fp := strings.Join(fc, string(os.PathSeparator))
 	path := filepath.Join(dest, fp)
+	ogMode := f.Mode()
 
 	if f.FileInfo().IsDir() {
-		os.MkdirAll(path, f.Mode())
+		os.MkdirAll(path, ogMode)
 	} else {
-		os.MkdirAll(filepath.Dir(path), f.Mode())
-		f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, f.Mode())
+		os.MkdirAll(filepath.Dir(path), ogMode)
+		f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, ogMode)
 		if err != nil {
 			return err
 		}
@@ -145,6 +146,9 @@ func extractFile(f *zip.File, dest string, c uint) error {
 
 		_, err = io.Copy(f, rc)
 		if err != nil {
+			return err
+		}
+		if err = f.Chmod(ogMode); err != nil {
 			return err
 		}
 	}
