@@ -80,6 +80,12 @@ func Unzip(src string, options ...Option) error {
 		if err := r.Close(); err != nil {
 			panic(err)
 		}
+		if args.DeleteSource {
+			err := os.Remove(src)
+			if err != nil {
+				panic(err)
+			}
+		}
 	}()
 
 	os.MkdirAll(args.Destination, 0755)
@@ -94,12 +100,6 @@ func Unzip(src string, options ...Option) error {
 		}
 	}
 
-	if args.DeleteSource {
-		err := os.Remove(src)
-		if err != nil {
-			return err
-		}
-	}
 
 	return nil
 }
