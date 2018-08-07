@@ -148,7 +148,7 @@ func extractFile(f *zip.File, dest string, c uint) error {
 		if err != nil {
 			return err
 		}
-		if err = f.Chmod(ogMode); err != nil {
+		if err = os.Chmod(f.Name, ogMode); err != nil {
 			return err
 		}
 	}
